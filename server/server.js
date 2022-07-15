@@ -28,6 +28,25 @@ app.get('/', (req, res) => {
     
 })
 
+// Create DB connection
+const db = mysql.createConnection({
+    user: "sql6506699",
+    host: "sql6.freesqldatabase.com",
+    password: "9AVfT6HvuD",
+    database: "sql6506699"
+})
+
+
+app.get('/getUsers', (req, res) => {
+
+    db.query("SELECT * FROM `user`", (error, result) => {
+        res.json(result)
+    })
+
+})
+
+
+
 
 
 
