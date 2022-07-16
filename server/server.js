@@ -45,6 +45,22 @@ app.get('/getUsers', (req, res) => {
 
 })
 
+app.post('/createUser', (req, res) => {
+
+    const email = req.body.email
+    const password = req.body.password
+
+    db.query("INSERT INTO `user` (email, password) VALUES (?,?)", [email, password], (error, response)=>{
+        if(error){
+            console.log(error)
+        }else{
+            res.send("Values Inserted")
+        }
+    })
+    
+
+})
+
 
 
 
