@@ -4,7 +4,7 @@ const mongoose = require('mongoose')
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const path = require('path')
-const Student = require('./models/student');
+const User = require('./models/User.js');
 
 
 
@@ -28,7 +28,7 @@ app.get('/', (req, res) => {
 })
 
 // Create DB connection
-const dbURI = "mongodb+srv://shreyash:dEXZ4fj3Ubnj9Yn@cluster0.iluxe3x.mongodb.net/schoolDB?retryWrites=true&w=majority"
+const dbURI = "mongodb+srv://shreyash:dEXZ4fj3Ubnj9Yn@cluster0.iluxe3x.mongodb.net/resumeBuilder?retryWrites=true&w=majority"
 mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then((result) => {
         console.log("Connected to DB")
@@ -39,7 +39,7 @@ mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
 
     app.get('/show-Students', (req, res) => {
 
-        Student.find()
+        User.find()
             .then((result) => {
                 res.send(result)
             }).catch((error) => {
