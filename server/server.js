@@ -1,9 +1,10 @@
 const express = require('express')
 const morgan = require('morgan')
-const mysql = require('mysql')
+const mongoose = require('mongoose')
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const path = require('path')
+const User = require('./models/User.js');
 
 
 
@@ -11,61 +12,47 @@ const app = express()
 const PORT = process.env.PORT || 3000
 let reqPath = path.join(__dirname, '../');
 
-// Middlewares
+// Middlewares and statiic files
 app.use(express.static(reqPath + './client'))
 app.use(morgan('dev'))
 app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({extended: true}))
+app.use(bodyParser.urlencoded({ extended: true }))
 app.use(cors());
-
-
 
 
 
 app.get('/', (req, res) => {
     res.sendFile(reqPath + '../client/index.html')
     // console.log(reqPath)
-    
+
 })
 
 // Create DB connection
-const db = mysql.createConnection({
-    user: "sql6506699",
-    host: "sql6.freesqldatabase.com",
-    password: "9AVfT6HvuD",
-    database: "sql6506699"
-})
-
-
-app.get('/getUsers', (req, res) => {
-
-    db.query("SELECT * FROM `user`", (error, result) => {
-        res.json(result)
+const dbURI = "mongodb+srv://shreyash:dEXZ4fj3Ubnj9Yn@cluster0.iluxe3x.mongodb.net/resumeBuilder?retryWrites=true&w=majority"
+mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then((result) => {
+        console.log("Connected to DB")
+    }).catch((error) => {
+        console.log(error)
     })
 
-})
 
-app.post('/createUser', (req, res) => {
+    app.get('/show-Students', (req, res) => {
 
-    const email = req.body.email
-    const password = req.body.password
-
-    db.query("INSERT INTO `user` (email, password) VALUES (?,?)", [email, password], (error, response)=>{
-        if(error){
-            console.log(error)
-        }else{
-            res.send("Values Inserted")
-        }
-    })
+        User.find()
+            .then((result) => {
+                res.send(result)
+            }).catch((error) => {
+                res.send(error)
+            })
     
-
-})
-
+    })
 
 
 
 
 
-app.listen(PORT, ()=> {
+
+app.listen(PORT, () => {
     console.log("Listning on port " + PORT)
 })
